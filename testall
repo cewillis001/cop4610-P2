@@ -1,0 +1,13 @@
+#!/bin/sh
+# file: testall
+#   run tests on all student programs
+#   assumes they all are inside directories 
+#   labeled sol*
+# created by Caroline Willis Jan 31, 2015
+# parameters
+
+
+ulimit -t 1;
+
+for i in sol*; do ./testone $i; 
+done

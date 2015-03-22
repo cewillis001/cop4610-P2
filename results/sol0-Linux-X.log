@@ -1,0 +1,51 @@
+sol0 Linux Fri Jan 30 19:49:34 EST 2015
+___compilation______________________________________________
+simulator.c: In function ‘simulator_queue_dump’:
+simulator.c:46: warning: cast from pointer to integer of different size
+events.c: In function ‘queue_dump’:
+events.c:89: warning: ISO C forbids braced-groups within expressions
+events.c:89: warning: value computed is not used
+events.c:89: warning: ISO C forbids braced-groups within expressions
+events.c:89: warning: value computed is not used
+events.c:90: warning: cast from pointer to integer of different size
+events.c:86: warning: unused parameter ‘p’
+events.c: In function ‘dispatch’:
+events.c:103: warning: ISO C forbids braced-groups within expressions
+events.c:105: warning: ISO C forbids braced-groups within expressions
+___test 1__________________________________________________
+terminated within time limit
+termination status = 0
+___stderr___________________________________________________
+TRACE: ->events_initialize (0)
+TRACE: <-events_initialize (0)
+TRACE: ->simulator_simulate (1)
+TRACE: ->events_initializer (0)
+TRACE: <-events_initializer (0)
+TRACE: --simulator_simulate (2)
+TRACE: ->events_simulate (0)
+       arrival_event     for proc    1 at time     32
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       arrival_event     for proc    2 at time     56
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       completion_event  for proc    1 at time     99
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       completion_event  for proc    2 at time    170
+TRACE: <-events_simulate (0)
+TRACE: --simulator_simulate (5)
+TRACE: ->events_finalizer (0)
+TRACE: <-events_finalizer (0)
+TRACE: <-simulator_simulate (6)
+___stdout___________________________________________________
+-----------------------
+proc    1 response time =     67
+proc    2 response time =    114
+-----------------------
+average response time   =     90
+completion_time         =    170
+total idle time         =     32
+percent idle time       =     18%
+-----------------------
+____________________________________________________________

@@ -1,0 +1,32 @@
+sol1 SunOS Sun Feb 1 20:47:27 EST 2015
+___compilation______________________________________________
+events.c: In function `queue_dump':
+events.c:89: warning: ISO C forbids braced-groups within expressions
+events.c:89: warning: ISO C forbids braced-groups within expressions
+events.c: At top level:
+events.c:86: warning: unused parameter 'p'
+events.c: In function `queue_dump':
+events.c:89: warning: value computed is not used
+events.c:89: warning: value computed is not used
+events.c: In function `dispatch':
+events.c:103: warning: ISO C forbids braced-groups within expressions
+events.c:105: warning: ISO C forbids braced-groups within expressions
+`programs' is updated.
+___test 1__________________________________________________
+terminated within time limit
+termination status = 0
+___stderr___________________________________________________
+TRACE: ->events_initialize (0)
+TRACE: <-events_initialize (0)
+TRACE: ->simulator_simulate (1)
+TRACE: ->events_initializer (0)
+TRACE: ->events_initialize (0)
+TRACE: <-events_initialize (0)
+TRACE: ->simulator_simulate (1)
+TRACE: ->events_initializer (0)
+__stderr_doesn't_match_original_with_no_args__
+__stderr_doesn't_match_original_with_8_nprocs__
+___stdout___________________________________________________
+__stdout_doesn't_match_original_with_no_args__
+__stdout_doesn't_match_original_with_8_nprocs__
+____________________________________________________________

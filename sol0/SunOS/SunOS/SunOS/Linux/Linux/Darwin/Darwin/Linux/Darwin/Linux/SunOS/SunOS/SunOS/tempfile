@@ -1,0 +1,9 @@
+-----------------------
+proc    1 response time =     28
+proc    2 response time =     64
+-----------------------
+average response time   =     46
+completion_time         =    117
+total idle time         =     25
+percent idle time       =     21%
+-----------------------

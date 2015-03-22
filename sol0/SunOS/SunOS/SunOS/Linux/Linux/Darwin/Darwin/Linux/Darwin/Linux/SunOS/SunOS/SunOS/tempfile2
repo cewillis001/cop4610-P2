@@ -1,0 +1,22 @@
+TRACE: ->events_initialize (0)
+TRACE: <-events_initialize (0)
+TRACE: ->simulator_simulate (1)
+TRACE: ->events_initializer (0)
+TRACE: <-events_initializer (0)
+TRACE: --simulator_simulate (2)
+TRACE: ->events_simulate (0)
+       arrival_event     for proc    1 at time     11
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       completion_event  for proc    1 at time     39
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       arrival_event     for proc    2 at time     53
+TRACE: <-events_simulate (0)
+TRACE: ->events_simulate (0)
+       completion_event  for proc    2 at time    117
+TRACE: <-events_simulate (0)
+TRACE: --simulator_simulate (5)
+TRACE: ->events_finalizer (0)
+TRACE: <-events_finalizer (0)
+TRACE: <-simulator_simulate (6)

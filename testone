@@ -1,10 +1,20 @@
 #!/bin/sh
 # file: testone
 #   run tests on one student program
+#   edited by Caroline Willis Jan 31 2015
+#   it assumes that the files being tested have a baseline
+#   called sol0 AND it is the first file tested
+# changes made:
+#   limited size of files created by ./sim
+#   added logic to compare tempfiles to a baseline, to check output
+#   added logic to preserve the baseline tempfiles, for that comparison
+#   added a second run of sim to test the nprocs argument
+#
 # parameters
 STUID=$1
 PATH=${PATH}\:.
 TMPFILE=tempfile
+BASELINE=sol0
 GDIR=`pwd`
 OSNAME=`uname -s`
 LOG=${GDIR}/results/${STUID}-${OSNAME}-X.log
@@ -13,9 +23,13 @@ DATE=`date`
 runtest() {
   echo "___$1__________________________________________________"
   rm -f ${TMPFILE} ${TMPFILE}2
+  (
+  ulimit -f 65
   ./sim >>${TMPFILE} 2>${TMPFILE}2 &
+  ./sim -nprocs=8 >>${TMPFILE}3 2>${TMPFILE}4 &
+  )
   CHILD=$!
-  usleep 500;
+  sleep 2;
   if  kill -KILL ${CHILD} 2>/dev/null; then
     echo  "*** timed out after 2 seconds"
     KILLED=yes
@@ -33,9 +47,40 @@ runtest() {
   fi
   echo "___stderr___________________________________________________"
   cat ${TMPFILE}2
+  cat ${TMPFILE}4
+  if [ "${STUID}" = "${BASELINE}" ]; then :
+  else
+    if cmp -s ${TMPFILE}2 ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}2; then
+       echo "__stderr_matches_original_with_no_args__"
+    else
+       echo "__stderr_doesn't_match_original_with_no_args__" 
+    fi
+    if cmp -s ${TMPFILE}4 ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}4; then
+       echo "__stderr_matches_original_with_8_nprocs__"
+    else
+       echo "__stderr_doesn't_match_original_with_8_nprocs__"
+    fi
+  fi
   echo "___stdout___________________________________________________"
   cat ${TMPFILE}
-  rm -f sim ${TMPFILE} ${TMPFILE}2
+  cat ${TMPFILE}3
+  if [ "${STUID}" = "${BASELINE}" ]; then :
+  else
+    if cmp -s ${TMPFILE} ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}; then
+       echo "__stdout_matches_original_with_no_args__"
+    else
+       echo "__stdout_doesn't_match_original_with_no_args__"
+    fi
+    if cmp -s ${TMPFILE}3 ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}3; then
+       echo "__stdout_matches_original_with_8_nprocs__"
+    else
+       echo "__stdout_doesn't_match_original_with_8_nprocs__"
+    fi
+  fi
+  if [ "${STUID}" = "${BASELINE}" ]; then :
+  else
+    rm -f sim ${TMPFILE} ${TMPFILE}2 ${TMPFILE}3 ${TMPFILE}4
+  fi
 }
 
 if cd ${GDIR}/${STUID}; then :
@@ -62,4 +107,3 @@ fi
 # run tests on compiled program
   runtest "test 1" >> ${LOG} 2>&1
 echo "____________________________________________________________" >> ${LOG}
-

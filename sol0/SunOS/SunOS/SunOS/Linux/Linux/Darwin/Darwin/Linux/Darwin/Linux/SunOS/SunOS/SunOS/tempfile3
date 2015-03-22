@@ -1,0 +1,15 @@
+-----------------------
+proc    1 response time =     28
+proc    2 response time =     64
+proc    3 response time =    174
+proc    4 response time =    244
+proc    5 response time =    339
+proc    6 response time =    481
+proc    7 response time =    593
+proc    8 response time =    710
+-----------------------
+average response time   =    329
+completion_time         =    822
+total idle time         =     25
+percent idle time       =      3%
+-----------------------
