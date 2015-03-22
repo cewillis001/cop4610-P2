@@ -1,0 +1,3 @@
+This one should output incorrect results.
+This new version makes the results incorrect, regardless of
+whether the -DDEBUG flag is set.

@@ -1,0 +1,65 @@
+#!/bin/sh
+# file: testone
+#   run tests on one student program
+# parameters
+STUID=$1
+PATH=${PATH}\:.
+TMPFILE=tempfile
+GDIR=`pwd`
+OSNAME=`uname -s`
+LOG=${GDIR}/results/${STUID}-${OSNAME}-X.log
+DATE=`date`
+
+runtest() {
+  echo "___$1__________________________________________________"
+  rm -f ${TMPFILE} ${TMPFILE}2
+  ./sim >>${TMPFILE} 2>${TMPFILE}2 &
+  CHILD=$!
+  usleep 500;
+  if  kill -KILL ${CHILD} 2>/dev/null; then
+    echo  "*** timed out after 2 seconds"
+    KILLED=yes
+  else
+    echo "terminated within time limit"
+    KILLED=no
+  fi
+  wait ${CHILD}
+  STATUS=$? 
+  echo "termination status = ${STATUS}"
+  if [ "${KILLED}" = "no" ]; then
+  if [ ${STATUS} -ge 128 ]; then
+     echo "*** failed [SIG$(kill -l $((${STATUS}-128)))]"
+  fi
+  fi
+  echo "___stderr___________________________________________________"
+  cat ${TMPFILE}2
+  echo "___stdout___________________________________________________"
+  cat ${TMPFILE}
+  rm -f sim ${TMPFILE} ${TMPFILE}2
+}
+
+if cd ${GDIR}/${STUID}; then :
+else
+  echo "*** ${GDIR}/${STUID} not found"
+  exit 255;
+fi
+for FILE in * ; do
+  if [ -h ${FILE} ]; then rm ${FILE}; fi
+done
+ln -fs ../common/* . 2>/dev/null
+make -s clean
+rm -f ${LOG}
+touch ${LOG}
+echo ${STUID} ${OSNAME} ${DATE} > ${LOG}
+echo "___compilation______________________________________________" >> ${LOG}
+make -s >>${LOG} 2>&1
+cd ${OSNAME}
+if [ ! -x sim ]; then
+  echo "*** program did not compile successfully" >> ${LOG}
+  echo "____________________________________________________________" >> ${LOG}
+  exit 255;
+fi
+# run tests on compiled program
+  runtest "test 1" >> ${LOG} 2>&1
+echo "____________________________________________________________" >> ${LOG}
+
