@@ -14,6 +14,7 @@
 STUID=$1
 PATH=${PATH}\:.
 TMPFILE=tempfile
+# BASELINE added by CEW
 BASELINE=sol0
 GDIR=`pwd`
 OSNAME=`uname -s`
@@ -23,12 +24,14 @@ DATE=`date`
 runtest() {
   echo "___$1__________________________________________________"
   rm -f ${TMPFILE} ${TMPFILE}2
+  # code inside these parens added by CEW
   (
   ulimit -f 65
   ./sim >>${TMPFILE} 2>${TMPFILE}2 &
   ./sim -nprocs=8 >>${TMPFILE}3 2>${TMPFILE}4 &
   )
   CHILD=$!
+  # following line edited by CEW
   sleep 2;
   if  kill -KILL ${CHILD} 2>/dev/null; then
     echo  "*** timed out after 2 seconds"
@@ -38,7 +41,7 @@ runtest() {
     KILLED=no
   fi
   wait ${CHILD}
-  STATUS=$? 
+  STATUS=$?
   echo "termination status = ${STATUS}"
   if [ "${KILLED}" = "no" ]; then
   if [ ${STATUS} -ge 128 ]; then
@@ -47,13 +50,14 @@ runtest() {
   fi
   echo "___stderr___________________________________________________"
   cat ${TMPFILE}2
+  # begin section added by CEW
   cat ${TMPFILE}4
   if [ "${STUID}" = "${BASELINE}" ]; then :
   else
     if cmp -s ${TMPFILE}2 ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}2; then
        echo "__stderr_matches_original_with_no_args__"
     else
-       echo "__stderr_doesn't_match_original_with_no_args__" 
+       echo "__stderr_doesn't_match_original_with_no_args__"
     fi
     if cmp -s ${TMPFILE}4 ${GDIR}/${BASELINE}/${OSNAME}/${TMPFILE}4; then
        echo "__stderr_matches_original_with_8_nprocs__"
@@ -61,8 +65,10 @@ runtest() {
        echo "__stderr_doesn't_match_original_with_8_nprocs__"
     fi
   fi
+  # end section added by CEW
   echo "___stdout___________________________________________________"
   cat ${TMPFILE}
+  # begin section added by CEW
   cat ${TMPFILE}3
   if [ "${STUID}" = "${BASELINE}" ]; then :
   else
@@ -81,6 +87,7 @@ runtest() {
   else
     rm -f sim ${TMPFILE} ${TMPFILE}2 ${TMPFILE}3 ${TMPFILE}4
   fi
+  # end section added by CEW
 }
 
 if cd ${GDIR}/${STUID}; then :
